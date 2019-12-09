@@ -23,7 +23,6 @@ namespace Jokes.WebApi.Models
         /// <summary>
         /// Question of the joke
         /// </summary>
-        [Required(AllowEmptyStrings = false, ErrorMessage = ErrorMessagesHelper.Question)]
         public string Question { get; set; }
 
         /// <summary>

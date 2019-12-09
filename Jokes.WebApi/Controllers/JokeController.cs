@@ -7,9 +7,13 @@ using Jokes.WebApi.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Jokes.WebApi.Services;
+using Jokes.WebApi.Validators;
 
 namespace Jokes.WebApi.Controllers
 {
+    /// <summary>
+    /// Joke Controller
+    /// </summary>
     [Route("api/v1/[controller]")]
     [ApiController]
     public class JokeController : ControllerBase
@@ -18,6 +22,11 @@ namespace Jokes.WebApi.Controllers
 
         private IJokeService JokeService { get; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="logger">Logger</param>
+        /// <param name="jokeService">Joke Service</param>
         public JokeController(ILogger<JokeController> logger, IJokeService jokeService)
         {
             _logger = logger;
@@ -26,7 +35,7 @@ namespace Jokes.WebApi.Controllers
 
         /// <summary>
         /// Get method to retrieve jokes
-        /// GET: api/Joke
+        /// GET: api/v1/Joke
         /// </summary>
         /// <returns>an enumerable of jokes</returns>
         [HttpGet]
@@ -52,13 +61,13 @@ namespace Jokes.WebApi.Controllers
 
         /// <summary>
         /// find method to retrieve filtered jokes
-        /// Find: api/Joke/valueToSearch
+        /// GetRandomAsync: api/v1/Joke/GetRandomAsync
         /// </summary>
         /// <returns>an enumerable of jokes</returns>
-        [HttpGet("RandomAsync")]
+        [HttpGet("GetRandomAsync")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<Joke> FindAsync()
+        public async Task<Joke> GetRandomAsync()
         {
             try
             {
@@ -75,7 +84,7 @@ namespace Jokes.WebApi.Controllers
 
         /// <summary>
         /// find method to retrieve filtered jokes
-        /// Find: api/Joke/valueToSearch
+        /// FindAsync: api/v1/Joke/valueToSearch
         /// </summary>
         /// <returns>an enumerable of jokes</returns>
         [HttpGet("{valueToSearch}", Name = "FindAsync")]
@@ -97,7 +106,7 @@ namespace Jokes.WebApi.Controllers
 
         /// <summary>
         /// Get an individual Joke by passing in the id
-        /// GET: api/Joke/5
+        /// GetAsync: api/v1/Joke/5
         /// </summary>
         /// <param name="id">Guid id</param>
         /// <returns>a joke</returns>
@@ -119,7 +128,7 @@ namespace Jokes.WebApi.Controllers
 
         /// <summary>
         /// Post method, used to add a joke
-        /// POST: api/Joke
+        /// PostAsync: api/v1/Joke
         /// </summary>
         /// <param name="joke">The joke to be saved</param>
         [HttpPost]
@@ -129,6 +138,7 @@ namespace Jokes.WebApi.Controllers
         {
             try
             {
+                Validate(joke);
                 await this.JokeService.InsertAsync(joke);
             }
             catch (Exception ex)
@@ -140,13 +150,13 @@ namespace Jokes.WebApi.Controllers
 
         /// <summary>
         /// Post method, used to add a joke
-        /// PUT: api/Joke/5
+        /// PutAsync: api/v1/Joke/5
         /// </summary>
         /// <param name="id">The id of the joke to be removed</param>
         /// <param name="joke">The joke to be saved</param>
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task Put(Guid id, [FromBody]Joke joke)
+        public async Task PutAsync(Guid id, [FromBody]Joke joke)
         {
             try
             {
@@ -154,6 +164,7 @@ namespace Jokes.WebApi.Controllers
                 ///one would be to eliminate the id and use the one on the joke
                 ///another would be to query the database for the expected joke confirm there are changes 
                 ///I've chosen to simply update the joke for brevity process the update
+                Validate(joke);
                 await this.JokeService.UpdateAsync(joke);
             }
             catch (Exception ex)
@@ -165,13 +176,13 @@ namespace Jokes.WebApi.Controllers
 
         /// <summary>
         /// delete method, used to remove a joke
-        /// DELETE: api/ApiWithActions/5
+        /// DeleteAsync: api/v1/joke/5
         /// </summary>
         /// <param name="id">The id of the joke to be removed</param>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             try
             {
@@ -181,6 +192,16 @@ namespace Jokes.WebApi.Controllers
             {
                 this._logger.LogError(ex.StackTrace);
                 throw new Exception(ex.Message);
+            }
+        }
+
+        private void Validate(Joke joke)
+        {
+            var results = new JokeValidator().Validate(joke);
+
+            if (!results.IsValid)
+            {
+                throw new Exception($"The following errors have occurred: {string.Join(", ", results.Errors)}");
             }
         }
     }
