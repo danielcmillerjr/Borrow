@@ -13,4 +13,6 @@ Visual Studio on Windows
 
 	1. Create a pull request.
 	2. once downloaded unzip the contents to a working directory
-	3. 
+	3. Open with Visual studio
+		a. A docker profile should be available for you in the launchSettings.json.
+		
