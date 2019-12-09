@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Jokes.UnitTests.MoqTests
 {
-    class JokeServiceTests
+    public class JokeServiceTests
     {
     }
 }
