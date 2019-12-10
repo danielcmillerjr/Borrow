@@ -24,21 +24,22 @@ namespace Jokes.WebApi.Data.GenericRepository
         /// <summary>
         /// Generic Get method to retrieve an entity
         /// </summary>
-        /// <param name="id">primary key of the entity</param>
+        /// <param name="skip">starting point of the list</param>
+        /// <param name="take">amount to take from the list</param>
         /// <returns>an entity</returns>
         Task<IEnumerable<TEntity>> GetAsync(int skip, int take);
 
         /// <summary>
         /// Generic Get method to retrieve an entity
         /// </summary>
-        /// <param name="id">primary key of the entity</param>
+        /// <param name="randomId">primary key of the entity</param>
         /// <returns>an entity</returns>
-        Task<TEntity> SearchAsync(int randomId);
+        Task<TEntity> GetByRandomIdAsync(int randomId);
 
         /// <summary>
         /// Generic search method to retrieve filtered entities
         /// </summary>
-        /// <param name="propertyName">property To Search</param>
+        /// <param name="propertyNames">property To Search</param>
         /// <param name="searchText">text to Search</param>
         /// <returns>enumerable of entity</returns>
         Task<IEnumerable<TEntity>> SearchAsync(IEnumerable<string> propertyNames, string searchText);

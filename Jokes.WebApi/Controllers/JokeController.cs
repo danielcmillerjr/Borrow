@@ -60,7 +60,7 @@ namespace Jokes.WebApi.Controllers
         }
 
         /// <summary>
-        /// find method to retrieve filtered jokes
+        /// Get method to retrieve a random joke
         /// GetRandomAsync: api/v1/Joke/GetRandomAsync
         /// </summary>
         /// <returns>an enumerable of jokes</returns>
@@ -160,10 +160,10 @@ namespace Jokes.WebApi.Controllers
         {
             try
             {
-                ///there are several approaches here
-                ///one would be to eliminate the id and use the one on the joke
-                ///another would be to query the database for the expected joke confirm there are changes 
-                ///I've chosen to simply update the joke for brevity process the update
+                //there are several approaches here
+                //one would be to eliminate the id and use the one on the joke
+                //another would be to query the database for the expected joke confirm there are changes 
+                //I've chosen to simply update the joke for brevity process the update
                 Validate(joke);
                 await this.JokeService.UpdateAsync(joke);
             }

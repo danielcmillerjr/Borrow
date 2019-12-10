@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Jokes.WebApi.Services
 {
+    /// <summary>
+    /// Joke Service Interface 
+    /// </summary>
     public interface IJokeService
     {
         /// <summary>
@@ -23,21 +26,22 @@ namespace Jokes.WebApi.Services
         /// <summary>
         /// Generic Get method to retrieve an entity
         /// </summary>
-        /// <param name="id">primary key of the entity</param>
+        /// <param name="skip">starting point of the list</param>
+        /// <param name="take">amount to take from the list</param>
         /// <returns>an entity</returns>
         Task<IEnumerable<Joke>> GetAsync(int skip, int take);
 
         /// <summary>
         /// Generic Get method to retrieve an entity
         /// </summary>
-        /// <param name="id">primary key of the entity</param>
+        /// <param name="randomId">primary key of the entity</param>
         /// <returns>an entity</returns>
-        Task<Joke> SearchAsync(int randomId);
+        Task<Joke> GetByRandomIdAsync(int randomId);
 
         /// <summary>
         /// Generic search method to retrieve filtered entities
         /// </summary>
-        /// <param name="propertyName">property To Search</param>
+        /// <param name="propertyNames">properties To Search</param>
         /// <param name="searchText">text to Search</param>
         /// <returns>enumerable of entity</returns>
         Task<IEnumerable<Joke>> SearchAsync(IEnumerable<string> propertyNames, string searchText);
