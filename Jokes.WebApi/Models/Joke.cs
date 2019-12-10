@@ -26,7 +26,7 @@ namespace Jokes.WebApi.Models
         public string Question { get; set; }
 
         /// <summary>
-        /// List of possible Answers for the joke
+        /// Answer to the joke
         /// </summary>
         public string Answer { get; set; }
     }
